@@ -1,0 +1,293 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:               #0a0907;
+  --bg-panel:         #151210;
+  --bg-raised:        #1e1a14;
+  --border:           #5a4a28;
+  --border-gold:      #8b6914;
+  --accent-gold:      #c8a84b;
+  --accent-burn:      #8b3a0f;
+  --text-primary:     #e8dcc8;
+  --text-secondary:   #a09070;
+  --text-muted:       #6a5a40;
+  --rarity-common:    #a09070;
+  --rarity-rare:      #4fc3f7;
+  --rarity-epic:      #ce93d8;
+  --rarity-legendary: #c8a84b;
+  --rarity-mythic:    #ff6b6b;
+}
+
+html, body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent-gold); text-decoration: none; }
+a:hover { color: var(--text-primary);  }
+
+/* NAV */
+.ds-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 60px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-gold);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.ds-nav__brand {
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+
+.ds-nav__tabs {
+  display: flex;
+  gap: 0;
+  height: 100%;
+}
+
+.ds-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.ds-tab i { font-size: 18px; }
+.ds-tab:hover { color: var(--text-primary); }
+
+.ds-tab--active {
+  color: var(--accent-gold);
+  border-bottom-color: var(--accent-gold);
+}
+
+.ds-nav__logout {
+  color: var(--text-muted);
+  font-size: 20px;
+  transition: color 0.2s;
+}
+.ds-nav__logout:hover { color: var(--rarity-mythic); }
+
+/* Main Layout */
+.ds-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* PANELS */
+.ds-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.ds-panel__title {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* corner ornaments on panel */
+.ds-panel::before,
+.ds-panel::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--accent-gold);
+  border-style: solid;
+}
+.ds-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.ds-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+/* Stats Rows */
+.ds-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+.ds-stat-row:last-child { border-bottom: none; }
+.ds-stat-row__label { color: var(--text-secondary); }
+.ds-stat-row__value { color: var(--text-primary); font-style: italic; }
+
+/* XP Bar */
+.ds-xp-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  margin-top: 0.5rem;
+}
+.ds-xp-bar__fill {
+  height: 100%;
+  background: var(--accent-gold);
+  transition: width 1s ease;
+}
+
+/* Achievement Cards */
+.ds-achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.ds-achievement {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  transition: border-color 0.2s;
+}
+.ds-achievement:hover { border-color: var(--border-gold); }
+
+.ds-achievement--locked {
+  opacity: 0.4;
+  filter: grayscale(0.8);
+}
+
+.ds-achievement__icon {
+  font-size: 24px;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+.ds-achievement--locked .ds-achievement__icon { color: var(--text-muted); }
+
+.ds-achievement__name {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+.ds-achievement--locked .ds-achievement__name { color: var(--text-muted); }
+
+.ds-achievement__desc {
+  font-size: 0.8rem;
+  color: var(--txt-secondary);
+  font-style: italic;
+}
+
+.ds-achievement__rarity {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.ds-achievement__flavor {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+
+.ds-achievement__date {
+  font-size: 0.7rem;
+  color: var(--accent-gold);
+  margin-top: 0.4rem;
+}
+
+/* Rank Badge */
+
+.ds-rank {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  border: 1px solid var(--border-gold);
+  padding: 0.2rem 0.75rem;
+  display: inline-block;
+}
+
+/* Project Rows */
+.ds-project-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.ds-project-row:last-child { border-bottom: none; }
+.ds-project-row__name { color: var(--text-primary); }
+.ds-project-row__hours { color: var(--accent-gold); font-style: italic }
+
+.ds-project-bar { 
+  width: 80px;
+  height: 4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  margin-left: 1rem;
+}
+.ds-project-bar__fill { height: 100%; background: var(--accent-burn); }
+
+
+/* Leaderboard */
+.ds-leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 0.9rem;
+}
+.ds-leaderboard-row--me { background: var(--accent-burn); }
+.ds-leaderboard-row__rank { color: var(--text-muted); width: 2rem; }
+.ds-leaderboard-row__name { flex: 1; color: var(--text-primary); }
+.ds-leaderboard-row__value { color: var(--accent-gold); font-style: italic; }
+
+/* FLASH MESSAGES */
+.ds-flash {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-gold);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  background: var(--bg-raised);
+}
+
+/* Buttons */
+.ds-btn {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--accent-gold);
+  font-family: 'IM Fell English', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.ds-btn:hover {
+  background: var(--accent-gold);
+  color: var(--bg);
+}

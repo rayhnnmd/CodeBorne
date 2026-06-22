@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} CodeBorne{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+    {% if current_user.is_authenticated %}
+    <nav class="ds-nav">
+        <div class="ds-nav__brand">CodeBorne</div>
+
+        <div class="ds-nav__tabs">
+            <a href="{{ url_for('dashboard.index') }}"
+               class="ds-tab {% if request.endpoint == 'dashboard.index' %}ds-tab--active{% endif %}">
+               <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+               <span>Status</span>
+            </a>
+            <a href="{{ url_for('achievements.index') }}"
+               class="ds-tab {% if request.endpoint == 'dashboard.index' %}ds-tab--active{% endlif %}">
+               <i class="ti ti-trophy" aria-hidden="true"></i>
+               <span>Achievements</span>
+            </a>
+            <a href="{{ url_for('profile.me') }}"
+               class="ds-tab {% if request.endpoint == 'profile.me' %}ds-tab--active{% endif %}">
+               <i class="ti ti-sword" aria-hidden="true"></i>
+               <span>Leaderboard</span>
+            </a>
+        </div>
+
+        <a href="{{ url_for('auth.logout') }}" class="ds-nav__logout">
+            <i class="ti ti-door-exit" aria-hidden="true"</i>
+        </a>
+    </nav>
+    {% endif %}
+
+    <main class="ds-main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, messages in messages %}
+                    <div class="ds-flash ds-flash--{{ category }}">{{ message }}</div>
+                {% endfor%}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+
