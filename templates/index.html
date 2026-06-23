@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}CodeBorne — Enter the Forge{% endblock %}
+
+{% block content %}
+<div class="login-wrap">
+
+  <div class="login-header">
+    <h1 class="login-title">CodeBorne</h1>
+    <p class="login-subtitle">Your coding journey, forged in darkness.</p>
+  </div>
+
+  <div class="ds-panel login-panel">
+    <p class="ds-panel__title">Begin Your Journey</p>
+
+    <div class="login-stats">
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Realm</span>
+        <span class="ds-stat-row__value">Hackatime</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Required</span>
+        <span class="ds-stat-row__value">Hackatime Account</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Reward</span>
+        <span class="ds-stat-row__value">XP, Ranks, Achievements</span>
+      </div>
+    </div>
+
+    <div class="login-divider"></div>
+
+    <p class="login-lore">
+      Your hours in the forge are not forgotten. Every line written,
+      every session endured — they are etched into your soul as experience.
+      Enter, and claim what is yours.
+    </p>
+
+    <a href="{{ url_for('auth.login') }}" class="ds-btn login-btn">
+      <i class="ti ti-brand-oauth" aria-hidden="true"></i>
+      Login with Hackatime
+    </a>
+  </div>
+
+  <p class="login-footer">
+    A Hackclub project — track your code, level your soul.
+  </p>
+
+</div>
+{% endblock %}
