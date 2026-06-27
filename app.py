@@ -23,6 +23,12 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+    
+    from utils.helpers import get_rarity_color
+
+    @app.template_filter("rarity_color")
+    def rarity_color_filter(rarity):
+        return get_rarity_color(rarity)
 
     from routes.auth import auth_bp
     from routes.dashboard import dashboard_bp

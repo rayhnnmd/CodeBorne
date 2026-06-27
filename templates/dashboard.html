@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}CodeBorne - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="dash-grid">
+  
+  <!-- LEFT COLUMN — character stats -->
+  <div class="dash-left">
+
+    <div class="ds-panel dash-identity">
+      <p class="ds-panel__title">Character</p>
+
+      <div class="dash-avatar-row">
+        {% if user.avatar %}
+          <img src="{{ user.avatar }}" alt="avatar" class="dash-avatar" />
+        {% else %}
+          <div class="dash-avatar-placeholder">{{ user.username[0].upper() }}</div>
+        {% endif %}
+        <div class="dash-identity-info">
+          <h2 class="dash-username">{{ user.username }}</h2>
+          <span class="ds-rank">{{ user.rank }}</span>
+        </div>
+      </div>
+
+      <div class="dash-level-row">
+        <span class="dash-level-label">Level</span>
+        <span class="dash-level-value">{{ user.level }}</span>
+      </div>
+
+      <div class="dash-xp-info">
+        <div class="dash-xp-bar-wrap">
+          <div class="ds-xp-bar">
+            {% set xp_percent = [(user.xp / (user.xp + xp_needed) * 100), 100] | min %}
+            <div class="ds-xp-bar__fill" style="width: {{ xo_percent }}%"></div>
+          </div>
+        </div>
+        <p class="dash-xp-label">{{ user.xp }} XP - {{ xp_needed }} until Level {{ next_level }}</p>
+      </div>
+    </div>
+
+    <div class="ds-panel">
+      <p class="ds-panel__title">Vitals</p>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Total Hours</span>
+        <span class="ds-stat-row__value">{{ total_hours }}h</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Best Day</span>
+        <span class="ds-stat-row__value">{{ best_day }}</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Current Streak</span>
+        <span class="ds-stat-row__value">{{ stats.streak_days }} days</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Languages</span>
+        <span class="ds-stat-row__value">{{ stats.languages_count }}</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Projects</span>
+        <span class="ds-stat-row__value">{{ stats.projects_count }}</span>
+      </div>
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">Total XP</span>
+        <span class="ds-stat-row__value">{{ user.xp }}</span>
+      </div>
+    </div>
+
+    <!-- top languages -->
+    <div class="ds-panel">
+      <p class="ds-panel__title">Equipped Languages</p>
+      {% for lang in languages[:5] %}
+      <div class="ds-stat-row">
+        <span class="ds-stat-row__label">{{ lang.name }}</span>
+        <span class="ds-stat-row__value">{{ (lang.total_seconds / 3600) | round(1) }}h</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  
+  <!-- RIGHT COLUMN — projects + achievements -->
+  <div class="dash-right">
+
+    <!-- projects panel -->
+    <div class="ds-panel">
+      <p class="ds-panel__title">Active Quests - Projects</p>
+      {% set max_seconds = projects | map(attribute='total_seconds') | max %}
+      {% for project in projects | sort(attribute='total_seconds', reverse=true) %}
+      <div class="ds-project-row">
+        <span class="ds-project-row__name">{{ project.name }}</span>
+        <div class="ds-project-bar">
+          {% set pct = (project.total_seconds / max_seconds * 100) | int %}
+          <div class="ds-project-bar__fill" style="width: {{ pct }}%"></div>
+        </div>
+        <span class="ds-project-row__hours">
+          {{ (project.total_seconds / 3600) | round(1) }}h
+        </span>
+      </div>
+      {% endif %}
+
+      <!-- recent achievements -->
+       <div class="ds-panel">
+        <p class="ds-panel__title">Achievements</p>
+
+        <div class="dash-achievement-summary">
+          <span class="dash-ach-count">{{ achievements | selectattr('unlocked') | list | length }}</span>
+          <span class="dash-ach-total">/ {{ achievements | length }} Unlocked</span>
+        </div>
+
+        <div class="ds-achievement-grid">
+          {% for entry in achievements %}
+          <div class="ds-achievement {% if not entry.unlocked %}ds-achievement--locked{% endif %}">
+            <div class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
+              <i class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
+            </div>
+
+            <p class="ds-achievement__name">
+              {% if entry.unlocked %}
+                {{ entry.achievement.name }}
+              {% else %}
+                ???
+              {% endif %}
+            </p>
+
+            <p class="ds-achievement__desc">
+              {% if entry.unlocked %}
+                {{ entry.achievement.description }}
+              {% else %}
+                Keep forging.
+              {% endif %}
+            </p>
+
+            <p class="ds-achievement__rarity" style="color: {{ entry.achievement.rarity | rarity_color }}">
+              {{ entry.achievement.rarity }}
+            </p>
+
+            {% if entry.unlocked %}
+              <p class="ds-achievement__flavor">{{ entry.achievement.flavor_text }}</p>
+              <p class="ds-achievement__date">
+                {{ entry.unlocked_at.strftime('%b %d, %Y') }}
+              </p>
+            {% endif %}
+
+            </div>
+
+            <a href="{{ url_for('achievements.index') }}" class="ds-btn dash-all-ach-btn">
+              View All Achievements
+            </a>
+
+          </div>
+        </div>
+        {% endblock %}
+
+      
