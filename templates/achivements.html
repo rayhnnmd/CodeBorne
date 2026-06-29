@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}CodeBorne - Achievements{% endblock %}
+
+{% block content %}
+<div class="ach-page">
+
+  <div class="ach-header">
+    <div class="ds-panel ach-summary-panel">
+      <p class="ds-panel__title">Achievement Compendium</p>
+      <div class="ach-summary-row">
+        <div class="ach-summary-stat">
+          <span class="ach-summary-number">{{ unlocked_count }}</span>
+          <span class="ach-summary-label">Unlocked</span>
+        </div>
+        <div class="ach-summary-divider"></div>
+        <div class="ach-summary-stat">
+          <span class="ach-summary-number">{{ total_count }}</span>
+          <span class="ach-summary-label">Total</span>
+        </div>
+      </div>
+
+
+      <!-- overall progress bar -->
+      <div class="ach-progress-wrap">
+        <div class="ds-xp-bar">
+          {% set pct = (unlocked_count / total_count * int %}
+          <div class="ds-xp-bar__fill" style="width: {{ pct }}"></div>
+        </div>
+        <p class="ach-progress-label">{{ pct }}% Complete</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNLOCKED -->
+  {% if unlocked %}
+  <div class="ach-section">
+    <h2 class="ach-section-title">
+      <i class="ti ti-trophy" aria-hidden="true"></i>
+      Obtained
+    </h2>
+    <div class="ds-achievement-grid">
+      {% for entry in unlocked %}
+      <div class="ds-achievement ds-achievement--unlocked">
+        <div class="ds-achevement__icon">
+          <i class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
+        </div>
+        <p class="ds-achievement__name">{{ entry.achievement.name }}</p>
+        <p class="ds-achievement__desc">{{ entry.achievement.description }}</p>
+        <p class="ds-achievement__rarity" style="color: {{ entry.color }}">
+          {{ entry.achievement.rarity }}
+        </p>
+        <p class="ds-achievement__flavor">{{ entry.achievement.flavor_text }}</p>
+        <p class="ds-achievement__date">
+          Obtained {{ entry.unlocked_at.strftime('%b %d, %Y') }}
+        </p>
+        <div class="ach-xp-reward">
+          +{{ entry.achievement.xp_reward }} XP
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Locked -->
+  {% if locked %}
+  <div class="ach-section-title">
+    <h2 class="ach-section-title">
+      <i class="ti ti-lock" aria-hidden="true"></i>
+      Yet to be Obtained
+    </h2>
+    <div class="ds-achievement-grid">
+      {% for entry in locked %}
+      <div class="ds-achievement ds-achievement--locked">
+        <div class="ds-achievement__icon">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+        </div>
+        <p class="ds-achievement__name">???</p>
+        <p class="ds-achievement__desc">{{ entry.achievement.description }}</p>
+        <p class="ds-achievement.rarity" style="color: {{ entry.color }}">
+          {{ entry.achievement.rarity }}
+        </p>
+        <p class="ds-achievement__flavor">Keep forging.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
