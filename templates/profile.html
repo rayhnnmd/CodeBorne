@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Codeborne - {{ profile_user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-grid">
+  
+  <!-- Left side — identity + stats -->
+  <div class="profile-left">
+
+    <div class="ds-panel profile-identity">
+      <p class="ds-panel__title">Character Sheet</p>
+
+      <div class="profile-avatar-wrap">
+        {% if profile_user.avatar %}
+          <img src="{{ profile_user.avatar }}" alt="avatar" class="profile-avatar" />
+        {% else %}
+          <div class="profile-avatar-placeholder">
+            {{ profile_user.username[0].upper() }}
+          </div>
+        {% endif %}
+        </div>
+
+        <h1 class="profile-username">{{ profile_user.username }}</h1>
+        <span class="ds-rank">{{ profile_user.rank }}</span>
+
+        <div class="profile-level-display">
+          <span class="profile-level-num">{{ profile_userr.level }}</span>
+          <span class="profile-level-label">Level</span>
+        </div>
+
+        <div class="ds-stat-row">
+          <span class="ds-stat-row__label">Total XP</span>
+          <span class="ds-stat-row__value">{{ profile_user.xp }}</span>
+        </div>
+        <div class="ds-stat-row">
+          <span class="ds-stat-row__label">Hours Forged</span>
+          <span class="ds-stat-row__value">{{ total_hours }}h</span>
+        </div>
+        <div class="ds-stat-row">
+          <span class="ds-stat-row__label">Streaks</span>
+          <span class="ds-stat-row__value">
+            {{ profile_user.stats.streaks_days if profile_user.stats else 0 }} days
+          </span>
+        </div>
+        <div class="ds-stat-row">
+          <span class="ds-stat-row__label">Achievements</span>
+          <span class="ds-stat-row__value">{{ showcase | length }}</span>
+        </div>
+
+        {% if is_own_profile %}
+        <div class="profile-actions">
+          <a href="{{ url_for('profile.download_card', username=profile_user.username) }}"
+             class="ds-btn profile-card-btn">
+            <i class="ti ti-download" aria-hidden="true"></i>
+            Download Card
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- top projects -->
+      {% if top_projects %}
+      <div class="ds-panel">
+        <p class="ds-panel__title">Known Quests</p>
+        {% set max_seconds = top_projects | map(attribute='total_seconds') | max %}
+        {% for project in top_projects %}
+        <div class="ds-project-row">
+          <span class="ds-projects-row__name">{{ project.name }}</span>
+          <div class="ds-project-bar">
+            {% set pct = (project.total_seconds / max_seconds * 100) | int %}
+            <div class="ds-project-bar__fill" style="width: {{ pct }}%"></div>
+          </div>
+          <span class="ds-project-row__hours">
+            {{ (prokect.total_seconds / 3600) | round(1) }}h
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Right Side — achievement showcase -->
+    <div class="profile-right">
+
+      <div class="ds-panel">
+        <p class="ds-panel__title">Achievement Showcase</p>
+
+        {% if showcase %}
+          <div class="ds-achievement-grid">
+            {% for entry in showcase %}
+            <div class="ds-achievement ds-achievement--unlocked">
+              <div class="ds-achievement__icon">
+                <i class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
+              </div>
+              <p class="ds-achievement__name">{{ entry.achievement.name }}</p>
+              <p class="ds-achievement__desc">{{ entry.achievement.description }}</p>
+              <p class="ds-achievement__rarity" style="color: {{ entry.color }}">
+                {{ entry.achievement.rarity }}
+              </p>
+              <p class="ds-achievement__flavor">{{ entry.achievement.flavor_text }}</p>
+              <p class="ds-achievement__date">
+                {{ entry.unlocked_at.strftime('%b %d, %Y') }}
+              </p>
+            </div>
+            {% endfor %}
+          </div>
+
+        {% else %}
+          <p class="profile-empty">
+            No achievements obtained yet. The forge awaits.
+          </p>
+        {% endif %}
+      </div>
+
+    <!-- share section -->
+    <div class="ds-panel profile-share">
+      <p class="ds-panel__title">Share Your Legend</p>
+      <p class="profile-share-url">{{ request.url }}</p>
+      <button class="ds-btn profile-copy-btn" onclick="copyProfileLink()">
+        <i class="ti ti-copy" aria-hidden="true"></i>
+        Copy Profile Link
+      </button>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+
+<script>
+function copyProfileLink() {
+  navigator.clipboard.writeText(window.loacation.href).then(() => {
+    const btn = document.querySelector('.profile-copy-btn');
+    const original = tn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i> Copied';
+    setTimeout(() => { btn.innerHTML = original; }, 2000);
+  });
+}
+</script>
+{% endblock %}
+
+
+
+
+
+
