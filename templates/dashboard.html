@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="dash-grid">
-  
+
   <!-- LEFT COLUMN — character stats -->
   <div class="dash-left">
 
@@ -31,7 +31,7 @@
         <div class="dash-xp-bar-wrap">
           <div class="ds-xp-bar">
             {% set xp_percent = [(user.xp / (user.xp + xp_needed) * 100), 100] | min %}
-            <div class="ds-xp-bar__fill" style="width: {{ xo_percent }}%"></div>
+            <div class="ds-xp-bar__fill" style="width: {{ xp_percent }}%"></div>
           </div>
         </div>
         <p class="dash-xp-label">{{ user.xp }} XP - {{ xp_needed }} until Level {{ next_level }}</p>
@@ -76,9 +76,8 @@
       </div>
       {% endfor %}
     </div>
-    {% endif %}
   </div>
-  
+
   <!-- RIGHT COLUMN — projects + achievements -->
   <div class="dash-right">
 
@@ -97,59 +96,59 @@
           {{ (project.total_seconds / 3600) | round(1) }}h
         </span>
       </div>
-      {% endif %}
+      {% endfor %}
+    </div>
 
-      <!-- recent achievements -->
-       <div class="ds-panel">
-        <p class="ds-panel__title">Achievements</p>
+    <!-- recent achievements -->
+    <div class="ds-panel">
+      <p class="ds-panel__title">Achievements</p>
 
-        <div class="dash-achievement-summary">
-          <span class="dash-ach-count">{{ achievements | selectattr('unlocked') | list | length }}</span>
-          <span class="dash-ach-total">/ {{ achievements | length }} Unlocked</span>
-        </div>
+      <div class="dash-achievement-summary">
+        <span class="dash-ach-count">{{ achievements | selectattr('unlocked') | list | length }}</span>
+        <span class="dash-ach-total">/ {{ achievements | length }} Unlocked</span>
+      </div>
 
-        <div class="ds-achievement-grid">
-          {% for entry in achievements %}
-          <div class="ds-achievement {% if not entry.unlocked %}ds-achievement--locked{% endif %}">
-            <div class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
-              <i class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
-            </div>
-
-            <p class="ds-achievement__name">
-              {% if entry.unlocked %}
-                {{ entry.achievement.name }}
-              {% else %}
-                ???
-              {% endif %}
-            </p>
-
-            <p class="ds-achievement__desc">
-              {% if entry.unlocked %}
-                {{ entry.achievement.description }}
-              {% else %}
-                Keep forging.
-              {% endif %}
-            </p>
-
-            <p class="ds-achievement__rarity" style="color: {{ entry.achievement.rarity | rarity_color }}">
-              {{ entry.achievement.rarity }}
-            </p>
-
-            {% if entry.unlocked %}
-              <p class="ds-achievement__flavor">{{ entry.achievement.flavor_text }}</p>
-              <p class="ds-achievement__date">
-                {{ entry.unlocked_at.strftime('%b %d, %Y') }}
-              </p>
-            {% endif %}
-
-            </div>
-
-            <a href="{{ url_for('achievements.index') }}" class="ds-btn dash-all-ach-btn">
-              View All Achievements
-            </a>
-
+      <div class="ds-achievement-grid">
+        {% for entry in achievements %}
+        <div class="ds-achievement {% if not entry.unlocked %}ds-achievement--locked{% endif %}">
+          <div class="ds-achievement__icon">
+            <i class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
           </div>
-        </div>
-        {% endblock %}
 
-      
+          <p class="ds-achievement__name">
+            {% if entry.unlocked %}
+              {{ entry.achievement.name }}
+            {% else %}
+              ???
+            {% endif %}
+          </p>
+
+          <p class="ds-achievement__desc">
+            {% if entry.unlocked %}
+              {{ entry.achievement.description }}
+            {% else %}
+              Keep forging.
+            {% endif %}
+          </p>
+
+          <p class="ds-achievement__rarity" style="color: {{ entry.achievement.rarity | rarity_color }}">
+            {{ entry.achievement.rarity }}
+          </p>
+
+          {% if entry.unlocked %}
+            <p class="ds-achievement__flavor">{{ entry.achievement.flavor_text }}</p>
+            <p class="ds-achievement__date">
+              {{ entry.unlocked_at.strftime('%b %d, %Y') }}
+            </p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <a href="{{ url_for('achievements.index') }}" class="ds-btn dash-all-ach-btn">
+        View All Achievements
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
