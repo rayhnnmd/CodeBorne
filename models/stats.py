@@ -8,7 +8,7 @@ class UserStats(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, unique=True)
 
     total_seconds = db.Column(db.Integer, default=0)
-    best_day_seconds = db.Column(db.Integer, defaault=0)
+    best_day_seconds = db.Column(db.Integer, default=0)
     streak_days = db.Column(db.Integer, default=0)
     languages_count = db.Column(db.Integer, default=0)
     projects_count = db.Column(db.Integer, default=0)

@@ -13,27 +13,42 @@ def should_refresh(last_synced):
     return datetime.utcnow() - last_synced > timedelta(minutes=15)
 
 def fetch_user_profile(token):
-    base = current_app.config["HACKATIME_BASE_URL"]
-    resp = requests.get(f"{base}/users/current", headers=_headers(token))
+    resp = requests.get(
+        "https://hackatime.hackclub.com/api/v1/authenticated/me",
+        headers=_headers(token)
+    )
     resp.raise_for_status()
-    return resp.json().get("data", {})
-
+    return resp.json()
 
 def fetch_stats(token):
-    base = current_app.config["HACKATIME_BASE_URL"]
-    resp = requests.get(
-        f"{base}/users/current/stats/all_time",
+    # get total hours all time
+    hours_resp = requests.get(
+        "https://hackatime.hackclub.com/api/v1/authenticated/hours",
         headers=_headers(token)
     )
-    resp.raise_for_status()
-    return resp.json().get("data", {})
+    streak_resp = requests.get(
+        "https://hackatime.hackclub.com/api/v1/authenticated/streak",
+        headers=_headers(token)
+    )
+    hours_resp.raise_for_status()
+    streak_resp.raise_for_status()
+
+    hours_data = hours_resp.json()
+    streak_data = streak_resp.json()
+
+    return {
+        "total_seconds": hours_data.get("total_seconds", 0),
+        "best_day": {"total_seconds": 0},
+        "streak": {"length": streak_data.get("streak_days", 0)},
+        "languages": [],
+    }
+
 
 def fetch_projects(token):
-    base = current_app.config["HACKATIME_BASE_URL"]
     resp = requests.get(
-
-        f"{base}/users/current/projects",
+        "https://hackatime.hackclub.com/api/v1/authenticated/projects",
         headers=_headers(token)
     )
     resp.raise_for_status()
-    return resp.json().get("data", [])
+    return resp.json().get("projects", [])
+   

@@ -47,41 +47,40 @@ def logout():
     logout_user()
     return redirect(url_for("auth.login"))
 
+def _get_or_create_user(profile, token):
+    user = User.query.filter_by(hackatime_id=str(profile["id"])).first()
+    if user:
+        user.access_token = token
+        db.session.commit()
+        return user
+    
+    username = profile.get("githu_username") or profile.get("slack_id") or f"user_{profile['id']}"
+
+    user = User(
+        hackatime_id=str(profile["id"]),
+        username=username,
+        avatar=None,
+        access_token=token,
+    )
+    db.session.add(user)
+    db.session.flush()
+    db.session.add(UserStats(user_id=user.id))
+    db.session.commit()
+    return user
 
 def _exchange_code_for_token(code):
     resp = requests.post(
         current_app.config["HACKATIME_TOKEN_URL"],
         data={
             "client_id": current_app.config["HACKATIME_CLIENT_ID"],
-            "client_secret": current_app.config["HACKATIME_CLIENT_SECRET"],
+            "code": code,
             "redirect_uri": current_app.config["HACKATIME_REDIRECT_URI"],
             "grant_type": "authorization_code",
-            "code": code,
         },
+        headers={"Accept": "application/json"},
     )
+    print("[oauth debug] status:", resp.status_code)
+    print("[oauth debug] response:", resp.text)
     if resp.status_code != 200:
         return None
     return resp.json().get("access_token")
-
-
-def _get_or_create_user(profile, token):
-    # find existing user or create a fresh one on first login
-    user = User.query.filter_by(hackatime_id=str(profile["id"])).first()
-    if user:
-        user.access_token = token
-        db.session.commit()
-        return user
-
-    user = User(
-        hackatime_id=str(profile["id"]),
-        username=profile.get("username", "unknown"),
-        avatar=profile.get("photo", None),
-        access_token=token,
-    )
-    db.session.add(user)
-    db.session.flush()
-
-    # create empty stats row for this user right away
-    db.session.add(UserStats(user_id=user.id))
-    db.session.commit()
-    return user
