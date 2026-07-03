@@ -26,7 +26,7 @@ ACHIEVEMENTS = [
         "condition": lambda s: s["total_seconds"] >= 360000,
     },
     {
-        "slugs": "addicted",
+        "slug": "addicted",
         "name": "Addicted",
         "icon": "skull",
         "description": "Code for 500 total hours",
@@ -109,7 +109,7 @@ ACHIEVEMENTS = [
         "slug": "touched_grass",
         "name": "Touched Grass",
         "icon": "leaf",
-        "edscription": "Haven't coded for 7 days straight",
+        "description": "Haven't coded for 7 days straight",
         "rarity": "common",
         "xp_reward": 10,
         "flavor_text": "Verified outside person. Disapponting(not quite, jk ;()",
