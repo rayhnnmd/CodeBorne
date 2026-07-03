@@ -130,6 +130,13 @@ def seed_achievements():
                 xp_reward=a["xp_reward"],
                 flavor_text=a["flavor_text"],
             ))
+        else:
+            exists.name = a["name"]
+            exists.icon = a["icon"]
+            exists.description = a["description"]
+            exists.rarity = a["rarity"]
+            exists.xp_reward = a["xp_reward"]
+            exists.flavor_text = a["flavor_text"]   
     db.session.commit()
 
 def evaluate_achievements(user, stats_dict):

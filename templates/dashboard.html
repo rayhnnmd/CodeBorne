@@ -12,12 +12,19 @@
 
       <div class="dash-avatar-row">
         {% if user.avatar %}
-          <img src="{{ user.avatar }}" alt="avatar" class="dash-avatar" />
+          <a href="{{ url_for('profile.me') }}">
+            <img src="{{ user.avatar }}" alt="avatar" class="dash-avatar" />
+          </a>
         {% else %}
-          <div class="dash-avatar-placeholder">{{ user.username[0].upper() }}</div>
+          <a href="{{ url_for('profile.me') }}" class="dash-avatar-placeholder" style="text-decoration: none;">
+            {{ user.username[0].upper() }}
+          </a>
         {% endif %}
         <div class="dash-identity-info">
-          <h2 class="dash-username">{{ user.username }}</h2>
+          <h2 class="dash-username">
+            <a href="{{ url_for('profile.me') }}" style="color: inherit; text-decoration: none;">
+              {{ user.username }}
+            </a>
           <span class="ds-rank">{{ user.rank }}</span>
         </div>
       </div>
@@ -151,4 +158,4 @@
     </div>
   </div>
 </div>
-{% endblock %}
+{% endblock %}  

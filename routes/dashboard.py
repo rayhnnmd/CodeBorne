@@ -24,7 +24,6 @@ def index():
     xp_needed = xp_to_next_level(current_user.xp)
     next_level = current_user.level + 1
 
-    # build achievement list with locked/unlocked state for the template
     unlocked_ids = {ua.achievement_id for ua in current_user.achievements}
     from models.achievement import Achievement
     all_achievements = Achievement.query.all()
@@ -54,7 +53,6 @@ def index():
 
 
 def _sync_if_needed(user):
-    # skip API call if data is still fresh
     if not should_refresh(user.last_synced):
         return
 
@@ -64,18 +62,37 @@ def _sync_if_needed(user):
 
         stats = user.stats or UserStats(user_id=user.id)
 
-        stats.total_seconds = raw_stats.get("total_seconds", 0)
-        stats.best_day_seconds = raw_stats.get("best_day", {}).get("total_seconds", 0)
+        all_time_seconds = sum(p.get("total_seconds", 0) for p in raw_projects)
+        stats.total_seconds = max(all_time_seconds, raw_stats.get("total_seconds", 0))
+        
+        stats.best_day_seconds = int(max(
+            raw_stats.get("total_seconds", 0) / 3.5,
+            all_time_seconds / 15
+        ))
+        
         stats.streak_days = raw_stats.get("streak", {}).get("length", 0)
-        stats.languages_count = len(raw_stats.get("languages", []))
-        stats.languages_json = json.dumps(raw_stats.get("languages", []))
+        
+        languages_seconds = {}
+        for p in raw_projects:
+            secs = p.get("total_seconds", 0)
+            langs = p.get("languages", [])
+            if langs:
+                sec_per_lang = secs / len(langs)
+                for l in langs:
+                    languages_seconds[l] = languages_seconds.get(l, 0) + sec_per_lang
+                    
+        languages_list = [
+            {"name": name, "total_seconds": int(secs)}
+            for name, secs in sorted(languages_seconds.items(), key=lambda x: x[1], reverse=True)
+        ]
+        
+        stats.languages_count = len(languages_list)
+        stats.languages_json = json.dumps(languages_list)
         stats.projects_count = len(raw_projects)
         stats.projects_json = json.dumps(raw_projects)
         stats.fetched_at = datetime.utcnow()
 
         db.session.add(stats)
-
-        # recalculate RPG stats from fresh data
         stats_dict = {
             "total_seconds": stats.total_seconds,
             "best_day_seconds": stats.best_day_seconds,
@@ -99,5 +116,4 @@ def _sync_if_needed(user):
         db.session.commit()
 
     except Exception as e:
-        # don't crash the dashboard if the API is down
         print(f"[sync error] {e}")
