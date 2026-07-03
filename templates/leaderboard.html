@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}CodeBorne — Leaderboard{% endblock %}
+
+{% block content %}
+<div class="lb-page">
+
+  <h1 class="lb-page-title">Hall of Legends</h1>
+
+  <div class="lb-tabs">
+    <button class="lb-tab lb-tab--active" data-target="lb-xp">
+      <i class="ti ti-bolt" aria-hidden="true"></i>
+      Top XP
+    </button>
+    <button class="lb-tab" data-target="lb-streak">
+      <i class="ti ti-flame" aria-hidden="true"></i>
+      Top Streak
+    </button>
+    <button class="lb-tab" data-target="lb-hours">
+      <i class="ti ti-clock" aria-hidden="true"></i>
+      Top Hours
+    </button>
+  </div>
+
+  <!-- XP BOARD -->
+  <div class="ds-panel lb-board" id="lb-xp">
+    <p class="ds-panel__title">Ranked by Experience</p>
+    {% for u in top_xp %}
+    <div class="ds-leaderboard-row {% if current_user.is_authenticated and u.id == current_user.id %}ds-leaderboard-row--me{% endif %}">
+      <span class="ds-leaderboard-row__rank">{{ loop.index }}</span>
+      <a href="{{ url_for('profile.profile', username=u.username) }}" class="ds-leaderboard-row__name">
+        {{ u.username }}
+      </a>
+      <span class="lb-rank-tag">{{ u.rank }}</span>
+      <span class="ds-leaderboard-row__value">{{ u.xp }} XP</span>
+    </div>
+    {% else %}
+    <p class="lb-empty">No legends yet. Be the first.</p>
+    {% endfor %}
+  </div>
+
+  <!-- STREAK BOARD -->
+  <div class="ds-panel lb-board" id="lb-streak" style="display: none;">
+    <p class="ds-panel__title">Ranked by Streak</p>
+    {% for u in top_streak %}
+    <div class="ds-leaderboard-row {% if current_user.is_authenticated and u.id == current_user.id %}ds-leaderboard-row--me{% endif %}">
+      <span class="ds-leaderboard-row__rank">{{ loop.index }}</span>
+      <a href="{{ url_for('profile.profile', username=u.username) }}" class="ds-leaderboard-row__name">
+        {{ u.username }}
+      </a>
+      <span class="lb-rank-tag">{{ u.rank }}</span>
+      <span class="ds-leaderboard-row__value">{{ u.stats.streak_days }} days</span>
+    </div>
+    {% else %}
+    <p class="lb-empty">No legends yet. Be the first.</p>
+    {% endfor %}
+  </div>
+
+  <!-- HOURS BOARD -->
+  <div class="ds-panel lb-board" id="lb-hours" style="display: none;">
+    <p class="ds-panel__title">Ranked by Hours Forged</p>
+    {% for u in top_hours %}
+    <div class="ds-leaderboard-row {% if current_user.is_authenticated and u.id == current_user.id %}ds-leaderboard-row--me{% endif %}">
+      <span class="ds-leaderboard-row__rank">{{ loop.index }}</span>
+      <a href="{{ url_for('profile.profile', username=u.username) }}" class="ds-leaderboard-row__name">
+        {{ u.username }}
+      </a>
+      <span class="lb-rank-tag">{{ u.rank }}</span>
+      <span class="ds-leaderboard-row__value">{{ seconds_to_hours(u.stats.total_seconds) }}h</span>
+    </div>
+    {% else %}
+    <p class="lb-empty">No legends yet. Be the first.</p>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.lb-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('lb-tab--active'));
+    document.querySelectorAll('.lb-board').forEach(b => b.style.display = 'none');
+
+    tab.classList.add('lb-tab--active');
+    document.getElementById(tab.dataset.target).style.display = 'block';
+  });
+});
+</script>
+{% endblock %}
