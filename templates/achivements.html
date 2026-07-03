@@ -24,8 +24,8 @@
       <!-- overall progress bar -->
       <div class="ach-progress-wrap">
         <div class="ds-xp-bar">
-          {% set pct = (unlocked_count / total_count * int %}
-          <div class="ds-xp-bar__fill" style="width: {{ pct }}"></div>
+          {% set pct = (unlocked_count / total_count * 100) | int %}
+          <div class="ds-xp-bar__fill" style="width: {{ pct }}%"></div>
         </div>
         <p class="ach-progress-label">{{ pct }}% Complete</p>
       </div>
@@ -42,7 +42,7 @@
     <div class="ds-achievement-grid">
       {% for entry in unlocked %}
       <div class="ds-achievement ds-achievement--unlocked">
-        <div class="ds-achevement__icon">
+        <div class="ds-achievement__icon">
           <i class="ti ti-{{ entry.achievement.icon }}" aria-hidden="true"></i>
         </div>
         <p class="ds-achievement__name">{{ entry.achievement.name }}</p>
@@ -65,7 +65,7 @@
 
   <!-- Locked -->
   {% if locked %}
-  <div class="ach-section-title">
+  <div class="ach-section">
     <h2 class="ach-section-title">
       <i class="ti ti-lock" aria-hidden="true"></i>
       Yet to be Obtained

@@ -54,7 +54,7 @@ def _get_or_create_user(profile, token):
         db.session.commit()
         return user
     
-    username = profile.get("githu_username") or profile.get("slack_id") or f"user_{profile['id']}"
+    username = profile.get("github_username") or profile.get("slack_id") or f"user_{profile['id']}"
 
     user = User(
         hackatime_id=str(profile["id"]),

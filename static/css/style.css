@@ -2,6 +2,9 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-variant: normal;
+  font-variant-caps: normal;
+  font-feature-settings: normal;
 }
 
 :root {
@@ -29,6 +32,9 @@ html, body {
   font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
+  font-variant: normal;
+  font-variant-caps: normal;
+  font-feature-settings: normal;
 }
 
 a { color: var(--accent-gold); text-decoration: none; }
@@ -139,7 +145,12 @@ a:hover { color: var(--text-primary);  }
   font-size: 0.95rem;
 }
 .ds-stat-row:last-child { border-bottom: none; }
-.ds-stat-row__label { color: var(--text-secondary); }
+.ds-stat-row__label {
+  color: var(--text-secondary);
+  font-variant: normal !important;
+  font-variant-caps: normal !important;
+  font-feature-settings: normal !important;
+}
 .ds-stat-row__value { color: var(--text-primary); font-style: italic; }
 
 /* XP Bar */
@@ -238,7 +249,12 @@ a:hover { color: var(--text-primary);  }
   font-size: 0.9rem;
 }
 .ds-project-row:last-child { border-bottom: none; }
-.ds-project-row__name { color: var(--text-primary); }
+.ds-project-row__name {
+  color: var(--text-primary);
+  font-variant: normal !important;
+  font-variant-caps: normal !important;
+  font-feature-settings: normal !important;
+}
 .ds-project-row__hours { color: var(--accent-gold); font-style: italic }
 
 .ds-project-bar { 
@@ -403,6 +419,9 @@ a:hover { color: var(--text-primary);  }
   color: var(--text-primary);
   letter-spacing: 0.05em;
   margin-bottom: 0.4rem;
+  font-variant: normal !important;
+  font-variant-caps: normal !important;
+  font-feature-settings: normal !important;
 }
 
 .dash-level-row {

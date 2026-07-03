@@ -25,7 +25,7 @@
         <span class="ds-rank">{{ profile_user.rank }}</span>
 
         <div class="profile-level-display">
-          <span class="profile-level-num">{{ profile_userr.level }}</span>
+          <span class="profile-level-num">{{ profile_user.level }}</span>
           <span class="profile-level-label">Level</span>
         </div>
 
@@ -66,13 +66,13 @@
         {% set max_seconds = top_projects | map(attribute='total_seconds') | max %}
         {% for project in top_projects %}
         <div class="ds-project-row">
-          <span class="ds-projects-row__name">{{ project.name }}</span>
+          <span class="ds-project-row__name">{{ project.name }}</span>
           <div class="ds-project-bar">
             {% set pct = (project.total_seconds / max_seconds * 100) | int %}
             <div class="ds-project-bar__fill" style="width: {{ pct }}%"></div>
           </div>
           <span class="ds-project-row__hours">
-            {{ (prokect.total_seconds / 3600) | round(1) }}h
+            {{ (project.total_seconds / 3600) | round(1) }}h
           </span>
         </div>
         {% endfor %}
@@ -131,9 +131,9 @@
 
 <script>
 function copyProfileLink() {
-  navigator.clipboard.writeText(window.loacation.href).then(() => {
+  navigator.clipboard.writeText(window.location.href).then(() => {
     const btn = document.querySelector('.profile-copy-btn');
-    const original = tn.innerHTML;
+    const original = btn.innerHTML;
     btn.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i> Copied';
     setTimeout(() => { btn.innerHTML = original; }, 2000);
   });

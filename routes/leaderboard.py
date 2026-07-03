@@ -7,7 +7,7 @@ leaderboard_bp = Blueprint("leaderboard", __name__)
 
 @leaderboard_bp.route("/leaderboard")
 def index():
-    top_xp = User.query.order_by(User.xp.ddesc()).limit(50).all()
+    top_xp = User.query.order_by(User.xp.desc()).limit(50).all()
     top_streak = (
         User.query
         .join(User.stats)

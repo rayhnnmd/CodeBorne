@@ -5,14 +5,15 @@ def seconds_to_display(seconds):
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
     if hours > 0:
-        return f"{minutes}m"
+        return f"{hours}h {minutes}m"
+    return f"{minutes}m"
         
 def get_rarity_color(rarity):
     colors = {
         "common":    "#aaaaaa",
         "rare":      "#4fc3f7",
         "epic":      "#ce93d8",
-        "legedary":  "#f0c040",
+        "legendary":  "#f0c040",
         "mythic":    "#ff6b6b",
     }
     return colors.get(rarity, "#aaaaaa")
