@@ -18,7 +18,7 @@ ACHIEVEMENTS = [
     {
         "slug": "grinder",
         "name": "Grinder",
-        "icon": "gear",
+        "icon": "settings",
         "description": "Code for 100 total hours",
         "rarity": "rare",
         "xp_reward": 500,
@@ -78,7 +78,7 @@ ACHIEVEMENTS = [
     {
         "slug": "archmage",
         "name": "Archmage",
-        "icon": "staff",
+        "icon": "wand",
         "description": "Reach 100 total hours",
         "rarity": "legendary",
         "xp_reward": 1000,
@@ -98,7 +98,7 @@ ACHIEVEMENTS = [
     {
         "slug": "architect",
         "name": "Architect",
-        "icon": "castle",
+        "icon": "building-castle",
         "description": "Work on 10 different projects",
         "rarity": "epic",
         "xp_reward": 800,
