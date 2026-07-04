@@ -1,6 +1,6 @@
 import requests
-from flask import Blueprint, redirect, request, url_for, current_app
-from flask_login import login_user, logout_user, login_required
+from flask import Blueprint, redirect, request, url_for, current_app, render_template
+from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from models.user import User
 from models.stats import UserStats
@@ -11,15 +11,21 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login")
 def login():
-    params = {
-        "client_id": current_app.config["HACKATIME_CLIENT_ID"],
-        "redirect_uri": current_app.config["HACKATIME_REDIRECT_URI"],
-        "response_type": "code",
-        "scope": "profile read",
-    }
-    auth_url = current_app.config["HACKATIME_AUTH_URL"]
-    query = "&".join(f"{k}={v}" for k, v in params.items())
-    return redirect(f"{auth_url}?{query}")
+    if current_user.is_authenticated:
+        return redirect(url_for("dashboard.index"))
+    
+    if request.args.get("start") == "true":
+        params = {
+            "client_id": current_app.config["HACKATIME_CLIENT_ID"],
+            "redirect_uri": current_app.config["HACKATIME_REDIRECT_URI"],
+            "response_type": "code",
+            "scope": "profile read",
+        }
+        auth_url = current_app.config["HACKATIME_AUTH_URL"]
+        query = "&".join(f"{k}={v}" for k, v in params.items())
+        return redirect(f"{auth_url}?{query}")
+    
+    return render_template("index.html")
 
 
 @auth_bp.route("/auth/callback")
