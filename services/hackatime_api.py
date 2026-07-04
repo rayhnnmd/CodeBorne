@@ -21,26 +21,35 @@ def fetch_user_profile(token):
     return resp.json()
 
 def fetch_stats(token):
-    # get total hours all time
-    hours_resp = requests.get(
-        "https://hackatime.hackclub.com/api/v1/authenticated/hours",
+    profile = fetch_user_profile(token)
+    user_id = str(profile.get("id"))
+
+    stats_resp = requests.get(
+        f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats",
         headers=_headers(token)
     )
+    stats_resp.raise_for_status()
+    stats_data = streak_resp.json().get("data", {})
+
     streak_resp = requests.get(
         "https://hackatime.hackclub.com/api/v1/authenticated/streak",
         headers=_headers(token)
     )
-    hours_resp.raise_for_status()
     streak_resp.raise_for_status()
+    streak_days = streak_resp.json().get("streak_days", 0)
 
-    hours_data = hours_resp.json()
-    streak_data = streak_resp.json()
+    languages = []
+    for l in stats_data.get("languages", []):
+        languages.append({
+            "name": l.get("name"),
+            "total_seconds": l.get("total_seconds", 0)
+        })
 
     return {
-        "total_seconds": hours_data.get("total_seconds", 0),
+        "total_seconds": stats_data.get("total_seconds", 0),
         "best_day": {"total_seconds": 0},
-        "streak": {"length": streak_data.get("streak_days", 0)},
-        "languages": [],
+        "streak": {"length": streak_days},
+        "languages": languages,
     }
 
 
