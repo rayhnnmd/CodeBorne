@@ -48,13 +48,13 @@ def logout():
     return redirect(url_for("auth.login"))
 
 def _get_or_create_user(profile, token):
+    username = profile.get("github_username") or profile.get("slack_id") or f"user_{profile['id']}"
     user = User.query.filter_by(hackatime_id=str(profile["id"])).first()
     if user:
         user.access_token = token
+        user.username = username
         db.session.commit()
         return user
-    
-    username = profile.get("github_username") or profile.get("slack_id") or f"user_{profile['id']}"
 
     user = User(
         hackatime_id=str(profile["id"]),

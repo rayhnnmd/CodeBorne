@@ -21,7 +21,6 @@
       </div>
 
 
-      <!-- overall progress bar -->
       <div class="ach-progress-wrap">
         <div class="ds-xp-bar">
           {% set pct = (unlocked_count / total_count * 100) | int %}
@@ -32,7 +31,6 @@
     </div>
   </div>
 
-  <!-- UNLOCKED -->
   {% if unlocked %}
   <div class="ach-section">
     <h2 class="ach-section-title">
@@ -63,7 +61,6 @@
   </div>
   {% endif %}
 
-  <!-- Locked -->
   {% if locked %}
   <div class="ach-section">
     <h2 class="ach-section-title">

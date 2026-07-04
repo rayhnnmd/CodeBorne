@@ -18,7 +18,7 @@ def create_app():
 
     login_manager.login_view = "auth.login"
 
-    from models import User, Achievement, UserAchievement, UserStats, DailyQuest
+    from models  import User, Achievement, UserAchievement, UserStats, DailyQuest
 
     @login_manager.user_loader
     def load_user(user_id):

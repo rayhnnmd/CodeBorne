@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, session
 from flask_login import login_required, current_user
 from app import db
 from models.stats import UserStats
@@ -18,20 +18,24 @@ def index():
     _sync_if_needed(current_user)
 
     stats = current_user.stats
-    projects = json.loads(stats.projects_json)
-    languages = json.loads(stats.languages_json)
+    projects = json.loads(stats.projects_json) if stats.projects_json else []
+    languages = json.loads(stats.languages_json) if stats.languages_json else []
 
     xp_needed = xp_to_next_level(current_user.xp)
     next_level = current_user.level + 1
 
     unlocked_ids = {ua.achievement_id for ua in current_user.achievements}
+    newly_unlocked_ids = session.pop("newly_unlocked", [])
+
     from models.achievement import Achievement
     all_achievements = Achievement.query.all()
+
     achievement_data = []
     for a in all_achievements:
         achievement_data.append({
             "achievement": a,
             "unlocked": a.id in unlocked_ids,
+            "newly_unlocked": a.id in newly_unlocked_ids,
             "unlocked_at": next(
                 (ua.unlocked_at for ua in current_user.achievements if ua.achievement_id == a.id),
                 None
@@ -45,10 +49,11 @@ def index():
         projects=projects,
         languages=languages,
         achievements=achievement_data,
+        newly_unlocked_ids=newly_unlocked_ids,
         xp_needed=xp_needed,
         next_level=next_level,
-        total_hours=seconds_to_hours(stats.total_seconds),
-        best_day=seconds_to_display(stats.best_day_seconds),
+        total_hours=seconds_to_hours(stats.total_seconds if stats else 0),
+        best_day=seconds_to_display(stats.best_day_seconds if stats else 0),
     )
 
 
@@ -62,37 +67,17 @@ def _sync_if_needed(user):
 
         stats = user.stats or UserStats(user_id=user.id)
 
-        all_time_seconds = sum(p.get("total_seconds", 0) for p in raw_projects)
-        stats.total_seconds = max(all_time_seconds, raw_stats.get("total_seconds", 0))
-        
-        stats.best_day_seconds = int(max(
-            raw_stats.get("total_seconds", 0) / 3.5,
-            all_time_seconds / 15
-        ))
-        
+        stats.total_seconds = raw_stats.get("total_seconds", 0)
+        stats.best_day_seconds = raw_stats.get("best_day", {}).get("total_seconds", 0)
         stats.streak_days = raw_stats.get("streak", {}).get("length", 0)
-        
-        languages_seconds = {}
-        for p in raw_projects:
-            secs = p.get("total_seconds", 0)
-            langs = p.get("languages", [])
-            if langs:
-                sec_per_lang = secs / len(langs)
-                for l in langs:
-                    languages_seconds[l] = languages_seconds.get(l, 0) + sec_per_lang
-                    
-        languages_list = [
-            {"name": name, "total_seconds": int(secs)}
-            for name, secs in sorted(languages_seconds.items(), key=lambda x: x[1], reverse=True)
-        ]
-        
-        stats.languages_count = len(languages_list)
-        stats.languages_json = json.dumps(languages_list)
+        stats.languages_count = len(raw_stats.get("languages", []))
+        stats.languages_json = json.dumps(raw_stats.get("languages", []))
         stats.projects_count = len(raw_projects)
         stats.projects_json = json.dumps(raw_projects)
         stats.fetched_at = datetime.utcnow()
 
         db.session.add(stats)
+
         stats_dict = {
             "total_seconds": stats.total_seconds,
             "best_day_seconds": stats.best_day_seconds,
@@ -111,7 +96,10 @@ def _sync_if_needed(user):
         user.last_synced = datetime.utcnow()
 
         seed_achievements()
-        evaluate_achievements(user, stats_dict)
+        newly = evaluate_achievements(user, stats_dict)
+
+        if newly:
+            session["newly_unlocked"] = [a.id for a in newly]
 
         db.session.commit()
 

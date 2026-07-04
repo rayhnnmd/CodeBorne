@@ -40,7 +40,6 @@ html, body {
 a { color: var(--accent-gold); text-decoration: none; }
 a:hover { color: var(--text-primary);  }
 
-/* NAV */
 .ds-nav {
   display: flex;
   align-items: center;
@@ -97,14 +96,12 @@ a:hover { color: var(--text-primary);  }
 }
 .ds-nav__logout:hover { color: var(--rarity-mythic); }
 
-/* Main Layout */
 .ds-main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-/* PANELS */
 .ds-panel {
   background: var(--bg-panel);
   border: 1px solid var(--border-gold);
@@ -122,7 +119,6 @@ a:hover { color: var(--text-primary);  }
   margin-bottom: 1rem;
 }
 
-/* corner ornaments on panel */
 .ds-panel::before,
 .ds-panel::after {
   content: '';
@@ -135,7 +131,6 @@ a:hover { color: var(--text-primary);  }
 .ds-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
 .ds-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
-/* Stats Rows */
 .ds-stat-row {
   display: flex;
   justify-content: space-between;
@@ -153,7 +148,6 @@ a:hover { color: var(--text-primary);  }
 }
 .ds-stat-row__value { color: var(--text-primary); font-style: italic; }
 
-/* XP Bar */
 .ds-xp-bar {
   width: 100%;
   height: 6px;
@@ -167,7 +161,6 @@ a:hover { color: var(--text-primary);  }
   transition: width 1s ease;
 }
 
-/* Achievement Cards */
 .ds-achievement-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -227,8 +220,6 @@ a:hover { color: var(--text-primary);  }
   margin-top: 0.4rem;
 }
 
-/* Rank Badge */
-
 .ds-rank {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
@@ -239,7 +230,6 @@ a:hover { color: var(--text-primary);  }
   display: inline-block;
 }
 
-/* Project Rows */
 .ds-project-row {
   display: flex;
   align-items: center;
@@ -267,7 +257,6 @@ a:hover { color: var(--text-primary);  }
 .ds-project-bar__fill { height: 100%; background: var(--accent-burn); }
 
 
-/* Leaderboard */
 .ds-leaderboard-row {
   display: flex;
   align-items: center;
@@ -280,7 +269,6 @@ a:hover { color: var(--text-primary);  }
 .ds-leaderboard-row__name { flex: 1; color: var(--text-primary); }
 .ds-leaderboard-row__value { color: var(--accent-gold); font-style: italic; }
 
-/* FLASH MESSAGES */
 .ds-flash {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
@@ -290,7 +278,6 @@ a:hover { color: var(--text-primary);  }
   background: var(--bg-raised);
 }
 
-/* Buttons */
 .ds-btn {
   background: transparent;
   border: 1px solid var(--border-gold);
@@ -308,7 +295,6 @@ a:hover { color: var(--text-primary);  }
   color: var(--bg);
 }
 
-/* Login Page */
 .login-wrap {
   display: flex;
   flex-direction: column;
@@ -377,7 +363,6 @@ a:hover { color: var(--text-primary);  }
   letter-spacing: 0.05em;
 }
 
-/* Dashboard */
 .dash-grid {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -488,7 +473,6 @@ a:hover { color: var(--text-primary);  }
   .dash-grid { grid-template-columns: 1fr; }
 }
 
-/* Achievement Page */
 .ach-page {
   display: flex;
   flex-direction: column;
@@ -559,7 +543,6 @@ a:hover { color: var(--text-primary);  }
   letter-spacing: 0.05em;
 }
 
-/* Profile Page */
 .profile-grid {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -663,7 +646,6 @@ a:hover { color: var(--text-primary);  }
   }
 }
 
-/* Leaderboard Page */
 .lb-page-title {
   font-size: 1.8rem;
   color: var(--accent-gold);
@@ -717,4 +699,53 @@ a:hover { color: var(--text-primary);  }
   font-style: italic;
   text-align: center;
   padding: 2rem 0;
+}
+
+.ds-unlock-popup {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  background: var(--bg-panel);
+  border: 1px solid var(--accent-gold);
+  padding: 1rem 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  min-width: 260px;
+}
+
+.ds-unlock-popup--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ds-unlock-pop__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ds-unlock-popup__inner i {
+  font-size: 24px;
+  color: var(--accent-gold);
+}
+
+.ds-unlock-popup_-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-unlock-popup__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
+.ds-unlock-popup__name {
+  font-size: 1rem;
+  color: var(--text-primary);
 }

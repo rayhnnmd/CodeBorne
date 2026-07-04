@@ -12,7 +12,6 @@ profile_bp = Blueprint("profile", __name__)
 @profile_bp.route("/profile")
 @login_required
 def me():
-    # redirect to the current user's public profile
     return profile(current_user.username)
 
 

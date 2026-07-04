@@ -12,7 +12,6 @@ def index():
     unlocked_ids = {ua.achievement_id for ua in current_user.achievements}
     all_achievements = Achievement.query.all()
 
-    # split into unlocked and locked for easier rendering in template
     unlocked = []
     locked = []
 
