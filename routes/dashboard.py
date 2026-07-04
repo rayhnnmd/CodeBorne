@@ -42,6 +42,8 @@ def index():
             ),
         })
 
+    achievement_data.sort(key=lambda x: (not x["unlocked"], x["achievement"].id))
+
     return render_template(
         "dashboard.html",
         user=current_user,

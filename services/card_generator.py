@@ -76,7 +76,6 @@ def generate_card(user, stats):
         draw.text((x, 122), label, font=f_label, fill=MUTED)
         draw.text((x, 140), value, font=f_value, fill=GOLD)
 
-    # divider
     draw.line([(36, 186), (W - 36, 186)], fill=GOLD_DIM, width=1)
 
     draw.text((36, 200), "ACHIEVEMENTS", font=f_label, fill=MUTED)

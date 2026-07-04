@@ -21,11 +21,9 @@ def fetch_user_profile(token):
     return resp.json()
 
 def fetch_stats(token):
-    # 1. Fetch user profile to get the Hackatime user ID
     profile = fetch_user_profile(token)
     user_id = str(profile.get("id"))
 
-    # 2. Fetch stats using the user ID
     stats_resp = requests.get(
         f"https://hackatime.hackclub.com/api/v1/users/{user_id}/stats",
         headers=_headers(token)
@@ -33,7 +31,6 @@ def fetch_stats(token):
     stats_resp.raise_for_status()
     stats_data = stats_resp.json().get("data", {})
 
-    # 3. Fetch streak
     streak_resp = requests.get(
         "https://hackatime.hackclub.com/api/v1/authenticated/streak",
         headers=_headers(token)
@@ -41,7 +38,6 @@ def fetch_stats(token):
     streak_resp.raise_for_status()
     streak_days = streak_resp.json().get("streak_days", 0)
 
-    # 4. Extract languages in format expected by dashboard:
     languages = []
     for l in stats_data.get("languages", []):
         languages.append({
