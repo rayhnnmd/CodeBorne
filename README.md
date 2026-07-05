@@ -9,7 +9,7 @@ CodeBorne transforms your [Hackatime](https://hackatime.hackclub.com) coding sta
 
 ## Deployement Link and Video
 
-[CodeBorne](https://codeborne.onrender.com)     and     [Tutorial Video](https://drive.google.com/file/d/1EvMWUfe-9wMBEYjbqa6LLre_wc0pJXCV/view?usp=drivesdk)
+[CodeBorne](https://codeborne.onrender.com)     and     [Demo Video](https://drive.google.com/file/d/1EvMWUfe-9wMBEYjbqa6LLre_wc0pJXCV/view?usp=drivesdk)
 
 ---
 
@@ -27,35 +27,35 @@ CodeBorne transforms your [Hackatime](https://hackatime.hackclub.com) coding sta
 
 ## Features
 
-- **RPG Progression** — your total coding hours convert to XP, levels, and rank titles (Novice Coder → Mythic Overlord)
-- **Achievement System** — 11 achievements across 4 rarity tiers that unlock based on your real coding activity
-- **Project Tracking** — every project you've worked on shown with hours spent and a progress bar
-- **Leaderboard** — compete globally by XP, streak, or total hours
-- **Public Profiles** — shareable profile page showing your rank, stats, and achievement showcase
-- **Shareable Card** — download a PNG card of your character stats to flex on Discord
-- **Dark Souls UI** — IM Fell English font, gold accents, aged panel borders, locked achievement fog
+- **RPG Progression** - your total coding hours convert to XP, levels, and rank titles (Novice Coder → Mythic Overlord)
+- **Achievement System** - 11 achievements across 4 rarity tiers that unlock based on your real coding activity
+- **Project Tracking** - every project you've worked on shown with hours spent and a progress bar
+- **Leaderboard** - compete globally by XP, streak, or total hours
+- **Public Profiles** - shareable profile page showing your rank, stats, and achievement showcase
+- **Shareable Card** - download a PNG card of your character stats to flex on Discord
+- **Dark Souls UI** - IM Fell English font, gold accents, aged panel borders, locked achievement fog
 
 ---
 
 ## How It Works
 
 1. Log in with your Hackatime account via OAuth
-2. CodeBorne fetches your coding stats — total hours, streak, languages, projects
+2. CodeBorne fetches your coding stats such as total hours, streak, languages, projects
 3. Your stats are converted into XP, a level, and a rank
 4. Achievements unlock automatically based on your activity
-5. Check back as you code more — new achievements pop as you hit milestones
+5. Check back as you code more with new achievements pop as you hit milestones
 
 ---
 
 ## Tech Stack
 
-- **Backend** — Flask, Flask-SQLAlchemy, Flask-Login, Flask-Migrate
-- **Database** — SQLite
-- **Auth** — Hackatime OAuth 2.0
-- **Frontend** — Jinja2, vanilla CSS, vanilla JS
-- **Icons** — Tabler Icons
-- **Font** — IM Fell English (Google Fonts)
-- **Card Export** — Pillow
+- **Backend** - Flask, Flask-SQLAlchemy, Flask-Login, Flask-Migrate
+- **Database** - SQLite
+- **Auth** - Hackatime OAuth 2.0
+- **Frontend** - Jinja2, vanilla CSS, vanilla JS
+- **Icons** - Tabler Icons
+- **Font** - IM Fell English (Google Fonts)
+- **Card Export** - Pillow
 
 ---
 
